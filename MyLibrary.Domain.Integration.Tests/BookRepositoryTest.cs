@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyLibrary.Domain.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace MyLibrary.Domain.Integration.Tests
 {
@@ -13,31 +15,33 @@ namespace MyLibrary.Domain.Integration.Tests
         [TestInitialize]
         public void setup()
         {
-
+            _bookRepository = new BookRepository(CONNECTIONSTRING, DATABASE_NAME);
         }
         [TestCleanup]
         public void Cleanup()
         {
-
+            _bookRepository.DeleteAll();
+            _bookRepository = null;
         }
 
         [TestMethod]
-        public void GetAll_ReturnsAllBooks()
+        public void GetAll_BooksExist_ReturnsAllBooks()
         {
-            var result = _bookRepository.GetAll();
-            Assert.AreNotEqual(null, result);
+            IList<Book> bookList = _bookRepository.GetAll();
+            Assert.IsNotNull(bookList);
         }
         [TestMethod]
-        public void GetOne_ReturnsBookByTitle()
+        public void GetOne_ValidTitle_ReturnsBookByTitle()
         {
             var result = _bookRepository.GetOne("Title");
             Assert.IsNotNull(result);
         }
         [TestMethod]
-        public void Insert_AddsBook()
+        public void Insert_ValidBookObject_AddsBook()
         {
             var book = new Book
             {
+                Id = Guid.NewGuid(),
                 Title = "Test Title",
                 Isbn = "18179770799",
                 rating = 4,
@@ -49,7 +53,7 @@ namespace MyLibrary.Domain.Integration.Tests
             var result = _bookRepository.GetOne(book.Title);
             Assert.IsNotNull(result);
         }
-        public void Update_UpdatesBook()
+        public void Update_ValidBookFields_UpdatesBook()
         {
             var book = new Book
             {

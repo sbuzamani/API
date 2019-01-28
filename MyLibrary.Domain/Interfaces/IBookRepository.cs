@@ -7,9 +7,10 @@ namespace MyLibrary.Domain
 {
     public interface IBookRepository
     {
-        object GetAll();
+        IList<Book> GetAll();
         Book GetOne(string v);
         void Insert(Book book);
         void Update(Book book);
+        void DeleteAll();
     }
 }

@@ -6,8 +6,8 @@ namespace MyLibrary.Domain.Entities
 {
     public class Book
     {
+        public Guid Id;
         public int rating;
-
         public string Title { get; set; }
         public string Isbn { get; set; }
         public string Review { get; set; }
