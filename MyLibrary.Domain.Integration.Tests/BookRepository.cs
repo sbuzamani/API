@@ -1,22 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using MongoDB.Driver;
 using MyLibrary.Domain.Entities;
 namespace MyLibrary.Domain
 
 {
     public class BookRepository : IBookRepository
     {
-        private string cONNECTIONSTRING;
-        private string dATABASE_NAME;
+        private readonly IMongoClient _client;
 
-        public BookRepository(string cONNECTIONSTRING, string dATABASE_NAME)
+        private readonly IMongoDatabase database;
+
+        public BookRepository(string connectionString, string databaseName)
         {
-            this.cONNECTIONSTRING = cONNECTIONSTRING;
-            this.dATABASE_NAME = dATABASE_NAME;
+            _client = new MongoClient(connectionString);
+            database = _client.GetDatabase(databaseName);
         }
 
         public void DeleteAll()
         {
-            throw new System.NotImplementedException();
+            var collection = GetCollection();
+
+            var filter = Builders<Book>.Filter.Empty;
+
+            collection.DeleteMany(filter);
         }
 
         public IList<Book> GetAll()
@@ -29,6 +36,11 @@ namespace MyLibrary.Domain
             throw new System.NotImplementedException();
         }
 
+        public Book GetOneById(Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert(Book book)
         {
             throw new System.NotImplementedException();
@@ -37,6 +49,16 @@ namespace MyLibrary.Domain
         public void Update(Book book)
         {
             throw new System.NotImplementedException();
+        }
+        protected IMongoCollection<Book> GetCollection()
+        {
+            var collectionName = GetCollectionName();
+
+            return database.GetCollection<Book>(collectionName);
+        }
+        private string GetCollectionName()
+        {
+            return typeof(Book).GetType().Name;
         }
     }
 }

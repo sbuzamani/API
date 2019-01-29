@@ -12,5 +12,6 @@ namespace MyLibrary.Domain
         void Insert(Book book);
         void Update(Book book);
         void DeleteAll();
+        Book GetOneById(Guid guid);
     }
 }

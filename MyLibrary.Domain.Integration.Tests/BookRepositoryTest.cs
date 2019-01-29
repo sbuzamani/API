@@ -31,9 +31,9 @@ namespace MyLibrary.Domain.Integration.Tests
             Assert.IsNotNull(bookList);
         }
         [TestMethod]
-        public void GetOne_ValidTitle_ReturnsBookByTitle()
+        public void GetOne_ValidID_ReturnsBookByTitle()
         {
-            var result = _bookRepository.GetOne("Title");
+            Book result = _bookRepository.GetOneById(new Guid());
             Assert.IsNotNull(result);
         }
         [TestMethod]
@@ -57,6 +57,7 @@ namespace MyLibrary.Domain.Integration.Tests
         {
             var book = new Book
             {
+                Id = Guid.NewGuid(),
                 Title = "Test Title",
                 Isbn = "18179770799",
                 rating = 4,
